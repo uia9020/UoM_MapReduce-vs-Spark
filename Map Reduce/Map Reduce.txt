@@ -1,0 +1,19 @@
+SSH
+~/Documents/MSc/upul-test-key.pem
+ssh -i ~/Documents/MSc/upul-test-key.pem hadoop@ec2-34-222-69-91.us-west-2.compute.amazonaws.com
+
+
+Hive
+
+CREATE EXTERNAL TABLE FlightDelays (rowNo INT,year STRING,month STRING,dayOfMonth STRING,dayOfWeek STRING,depTime STRING,crsDepTime STRING,arrTime STRING,crsArrTime STRING,unCarrier STRING,flightNo STRING,tailNo STRING,actualElapsedTime INT,crsElapsedTime INT,airTime INT,arrDelay INT,depDelay INT,origin STRING,dest STRING,distance INT,taxlin INT,taxout INT,cancelled STRING,cancellationCode STRING,diverted STRING,carrierDelay INT,weatherDelay INT,nasDelay INT,securityDelay INT,lateAirCraftDelay INT)ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LOCATION 's3://plane-delay/input' TBLPROPERTIES ("skip.header.line.count"="1");
+
+SELECT year,avg((carrierDelay/arrDelay)*100)from FlightDelays GROUP BY year ORDER BY year;
+
+SELECT year,avg((nasDelay/arrDelay)*100)from FlightDelays GROUP BY year ORDER BY year;
+
+SELECT year,avg((weatherDelay/arrDelay)*100)from FlightDelays GROUP BY year ORDER BY year;
+
+SELECT year,avg((lateAirCraftDelay/arrDelay)*100)from FlightDelays GROUP BY year ORDER BY year;
+
+SELECT year,avg((securityDelay/arrDelay)*100)from FlightDelays GROUP BY year ORDER BY year;
+

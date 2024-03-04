@@ -1,0 +1,32 @@
+SSH
+~/Documents/MSc/upul-test-key.pem
+ssh -i ~/Documents/MSc/upul-test-key.pem hadoop@ec2-52-37-116-5.us-west-2.compute.amazonaws.com
+
+spark-shell
+
+Step 1: Start Spark Session
+import org.apache.spark.sql.SparkSession
+val spark = SparkSession.builder.appName("PlaneDelayApp").getOrCreate()
+
+Step 2: Read the CSV File from S3
+val df = spark.read.option("header", "true").option("inferSchema", "true").csv("s3://plane-delay/input/DelayedFlights-updated.csv")
+
+Step 3: Create View
+df.createOrReplaceTempView("plane_delay")
+
+Step 4: Query
+
+val resultCarrierDelay = spark.sql("SELECT Year, avg((CarrierDelay /ArrDelay)*100) from plane_delay GROUP BY Year")
+spark.time(resultCarrierDelay .show())
+
+val resultNASDelay = spark.sql("SELECT Year, avg((NASDelay /ArrDelay)*100) from plane_delay GROUP BY Year")
+spark.time(resultNASDelay .show())
+
+val resultWeatherDelay = spark.sql("SELECT Year, avg((WeatherDelay /ArrDelay)*100) from plane_delay GROUP BY Year")
+spark.time(resultWeatherDelay .show())
+
+val resultLateAircraftDelay = spark.sql("SELECT Year, avg((LateAircraftDelay /ArrDelay)*100) from plane_delay GROUP BY Year")
+spark.time(resultLateAircraftDelay .show())
+
+val resultSecurityDelay = spark.sql("SELECT Year, avg((SecurityDelay /ArrDelay)*100) from plane_delay GROUP BY Year")
+spark.time(resultSecurityDelay .show())
