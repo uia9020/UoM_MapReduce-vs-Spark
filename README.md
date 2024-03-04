@@ -33,4 +33,5 @@ The findings from the analysis are summarized in the repository, showcasing the 
 
 We welcome contributions from the community. If you would like to contribute to this project, please fork the repository and submit a pull request with your proposed changes.
 
-
+## NAS Delay Comparison
+![NAS Delay Comparison](/images/NAS-Delay.png)
